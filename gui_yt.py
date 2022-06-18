@@ -8,13 +8,21 @@ def select_path():
     path = askdirectory
     path_label.config(text = path)
 
-def download_file():
+def download_video():
     user_link = link_field.get()    # Get the link entered by the user
     user_path = path_label.cget("text")     # Get the path entered by the user from the label
     root.title("Downloading...")
-    video = YouTube(user_link).streams.get_lowest_resolution().download()   # Used to download the video
-    root.title("Download Complete!")
+    video = YouTube(user_link).streams.get_highest_resolution().download()   # Used to download the video
+    root.title("Video Download Complete!")
     shutil.move(video, user_path)   # Used to move the video to the desired directory
+
+def download_audio():
+    user_link = link_field.get()
+    user_path = path_label.cget("text")
+    root.title("Downloading...")
+    audio = YouTube(user_link).streams.get_audio_only().download()   # Used to download the audio
+    root.title("Audio Download Complete!")
+    shutil.move(audio, user_path)   # Used to move the video to the desired directory
 
 root = Tk()
 root.title("YouTube Video Downloader")
@@ -42,7 +50,9 @@ canvas.create_window(250, 330, window=select_btn)
 canvas.create_window(250, 170, window=link_label)
 canvas.create_window(250, 220, window=link_field)
 
-download_btn = Button(root, font = ('Arial', 12), text="Download File", command=download_file)
+download_btn = Button(root, font = ('Arial', 12), text="Download Video", command=download_video)
 canvas.create_window(250, 390, window=download_btn)
+audio_download_btn = Button(root, font = ('Arial', 12), text="Download Audio", command=download_audio)
+canvas.create_window(250, 440, window=audio_download_btn)
 
 root.mainloop()
